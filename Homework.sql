@@ -20,19 +20,19 @@ What is one query would you use to obtain this information?*/
 
 SELECT actor_id, first_name, last_name 
 FROM actor 
-WHERE first_name = "Joe";
+WHERE first_name LIKE "JOE";
 
 /* 2b. Find all actors whose last name contain the letters `GEN`: */
 
 SELECT actor_id, first_name, last_name 
 FROM actor 
-WHERE last_name = "%GEN%";
+WHERE last_name LIKE "%GEN%";
 
 /* 2c. Find all actors whose last names contain the letters `LI`. This time, order the rows by last name and first name, in that order: */
 
 SELECT actor_id, last_name, first_name 
 FROM actor 
-WHERE last_name = "%LI%";
+WHERE last_name LIKE "%LI%";
 
 /* 2d. Using `IN`, display the `country_id` and `country` columns of the following countries: Afghanistan, Bangladesh, and China:   */
 
@@ -69,7 +69,7 @@ GROUP BY last_name;
 SELECT last_name, COUNT(last_name) AS 'SAME'
 FROM actor
 GROUP BY last_name
-HAVING SAME >2;
+HAVING SAME >1;
 
 /* 4c. Oh, no! The actor `HARPO WILLIAMS` was accidentally entered in the `actor` table as `GROUCHO WILLIAMS`, the name of Harpo's second cousin's 
 husband's yoga teacher. Write a query to fix the record. */
@@ -86,10 +86,13 @@ the actor will be with the grievous error. BE CAREFUL NOT TO CHANGE THE FIRST NA
 (Hint: update the record using a unique identifier.) */
 
 SET SQL_SAFE_UPDATES = 0;
-SELECT DISTINCT first_name, last_name FROM actor;
+SELECT first_name, last_name FROM actor;
 UPDATE actor
-SET first_name = 'GROUCHO'
-WHERE first_name = 'HARPO';
+SET first_name = 'GROUCHO' WHERE actor_id = 172;
+UPDATE actor
+SET first_name = 'MUCHO GROUCHO' WHERE actor_id = 78;
+UPDATE actor
+SET first_name = 'MUCHO GROUCHO' WHERE actor_id=106;
 SET SQL_SAFE_UPDATES = 1;
 
 /* 5a. You cannot locate the schema of the `address` table. Which query would you use to re-create it?   Hint: <https://dev.mysql.com/doc/refman/5.7/en/show-create-table.html>*/
@@ -190,7 +193,6 @@ FROM film
 WHERE rating IN ('G', 'PG', 'PG13');
 
 /* 7e. Display the most frequently rented movies in descending order.  */
-
 
 SELECT f.title, COUNT(r.rental_id) AS 'Rental Amount'
 FROM rental r
